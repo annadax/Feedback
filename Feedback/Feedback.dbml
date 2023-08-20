@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="AcademicFeedbacks" Class="FeedbackDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=CHERRYDELAP\SERVER;Initial Catalog=AcademicFeedbacks;Persist Security Info=True;User ID=sa" SettingsObjectName="Feedback.Properties.Settings" SettingsPropertyName="AcademicFeedbacksConnectionString1" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Class" Member="Classes">
+    <Type Name="Class">
+      <Column Name="ClassCode" Type="System.String" DbType="NChar(12) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ClassName" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="Program" Type="System.String" DbType="NChar(10)" CanBeNull="true" />
+      <Column Name="MajorCode" Type="System.String" DbType="NChar(12)" CanBeNull="true" />
+      <Association Name="Class_Course" Member="Courses" ThisKey="ClassCode" OtherKey="ClassCode" Type="Course" />
+      <Association Name="Class_Student" Member="Students" ThisKey="ClassCode" OtherKey="ClassCode" Type="Student" />
+      <Association Name="Major_Class" Member="Major" ThisKey="MajorCode" OtherKey="MajorCode" Type="Major" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Subject" Member="Subjects">
+    <Type Name="Subject">
+      <Column Name="SubjectCode" Type="System.String" DbType="NChar(12) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="SubjectName" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="FacultyCode" Type="System.String" DbType="NChar(12)" CanBeNull="true" />
+      <Column Name="Type" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="Credits" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Subject_Course" Member="Courses" ThisKey="SubjectCode" OtherKey="SubjectCode" Type="Course" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Course" Member="Courses">
+    <Type Name="Course">
+      <Column Name="CourseCode" Type="System.String" DbType="NChar(12) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="LecturerCode" Type="System.String" DbType="NChar(12)" CanBeNull="true" />
+      <Column Name="SemesterCode" Type="System.String" DbType="NChar(12)" CanBeNull="true" />
+      <Column Name="SubjectCode" Type="System.String" DbType="NChar(12)" CanBeNull="true" />
+      <Column Name="ClassCode" Type="System.String" DbType="NChar(12)" CanBeNull="true" />
+      <Column Name="Capacity" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Course_CourseRegister" Member="CourseRegisters" ThisKey="CourseCode" OtherKey="CourseCode" Type="CourseRegister" />
+      <Association Name="Course_Feedback" Member="Feedbacks" ThisKey="CourseCode" OtherKey="CourseCode" Type="Feedback" />
+      <Association Name="Class_Course" Member="Class" ThisKey="ClassCode" OtherKey="ClassCode" Type="Class" IsForeignKey="true" />
+      <Association Name="Subject_Course" Member="Subject" ThisKey="SubjectCode" OtherKey="SubjectCode" Type="Subject" IsForeignKey="true" />
+      <Association Name="Lecturer_Course" Member="Lecturer" ThisKey="LecturerCode" OtherKey="LecturerCode" Type="Lecturer" IsForeignKey="true" />
+      <Association Name="Semester_Course" Member="Semester" ThisKey="SemesterCode" OtherKey="SemesterCode" Type="Semester" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.CourseRegister" Member="CourseRegisters">
+    <Type Name="CourseRegister">
+      <Column Name="CourseCode" Type="System.String" DbType="NChar(12) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="StudentCode" Type="System.String" DbType="NChar(12) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="Course_CourseRegister" Member="Course" ThisKey="CourseCode" OtherKey="CourseCode" Type="Course" IsForeignKey="true" />
+      <Association Name="Student_CourseRegister" Member="Student" ThisKey="StudentCode" OtherKey="StudentCode" Type="Student" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Faculty" Member="Faculties">
+    <Type Name="Faculty">
+      <Column Name="FacultyCode" Type="System.String" DbType="NChar(12) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="FacultyName" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Association Name="Faculty_Lecturer" Member="Lecturers" ThisKey="FacultyCode" OtherKey="FacultyCode" Type="Lecturer" />
+      <Association Name="Faculty_Major" Member="Majors" ThisKey="FacultyCode" OtherKey="FacultyCode" Type="Major" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Feedback" Member="Feedbacks">
+    <Type Name="Feedback">
+      <Column Name="FeedbackCode" Type="System.String" DbType="NChar(12) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="StudentCode" Type="System.String" DbType="NChar(12)" CanBeNull="true" />
+      <Column Name="CourseCode" Type="System.String" DbType="NChar(12)" CanBeNull="true" />
+      <Column Name="Text" Type="System.String" DbType="NVarChar(1000)" CanBeNull="true" />
+      <Association Name="Course_Feedback" Member="Course" ThisKey="CourseCode" OtherKey="CourseCode" Type="Course" IsForeignKey="true" />
+      <Association Name="Student_Feedback" Member="Student" ThisKey="StudentCode" OtherKey="StudentCode" Type="Student" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Lecturer" Member="Lecturers">
+    <Type Name="Lecturer">
+      <Column Name="LecturerCode" Type="System.String" DbType="NChar(12) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="LecturerName" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="Email" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="SecretCode" Type="System.String" DbType="NChar(12)" CanBeNull="true" />
+      <Column Name="FacultyCode" Type="System.String" DbType="NChar(12)" CanBeNull="true" />
+      <Column Name="Rank" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Association Name="Lecturer_Course" Member="Courses" ThisKey="LecturerCode" OtherKey="LecturerCode" Type="Course" />
+      <Association Name="Faculty_Lecturer" Member="Faculty" ThisKey="FacultyCode" OtherKey="FacultyCode" Type="Faculty" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Major" Member="Majors">
+    <Type Name="Major">
+      <Column Name="MajorCode" Type="System.String" DbType="NChar(12) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="MajorName" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="FacultyCode" Type="System.String" DbType="NChar(12)" CanBeNull="true" />
+      <Association Name="Major_Class" Member="Classes" ThisKey="MajorCode" OtherKey="MajorCode" Type="Class" />
+      <Association Name="Faculty_Major" Member="Faculty" ThisKey="FacultyCode" OtherKey="FacultyCode" Type="Faculty" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Semester" Member="Semesters">
+    <Type Name="Semester">
+      <Column Name="SemesterCode" Type="System.String" DbType="NChar(12) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="StartDate" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="EndDate" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Association Name="Semester_Course" Member="Courses" ThisKey="SemesterCode" OtherKey="SemesterCode" Type="Course" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Student" Member="Students">
+    <Type Name="Student">
+      <Column Name="StudentCode" Type="System.String" DbType="NChar(12) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="StudentName" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="YearOfEntrance" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Sex" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="DOB" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="Email" Type="System.String" DbType="NVarChar(70)" CanBeNull="true" />
+      <Column Name="IsDelete" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="ClassCode" Type="System.String" DbType="NChar(12)" CanBeNull="true" />
+      <Association Name="Student_CourseRegister" Member="CourseRegisters" ThisKey="StudentCode" OtherKey="StudentCode" Type="CourseRegister" />
+      <Association Name="Student_Feedback" Member="Feedbacks" ThisKey="StudentCode" OtherKey="StudentCode" Type="Feedback" />
+      <Association Name="Class_Student" Member="Class" ThisKey="ClassCode" OtherKey="ClassCode" Type="Class" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>
